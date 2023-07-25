@@ -23,23 +23,26 @@ const defaultState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case INCREASE_AMOUNT:
-      console.log({
-        ...state.cartItems.get(action.payload.id),
-        amount: state.cartItems.get(action.payload.id).amount + 1,
-      });
+      //   const newItem = {
+      //     ...state.cartItems.get(action.payload.id),
+      //     amount: state.cartItems.get(action.payload.id).amount + 1,
+      //   };
 
-      //   state.cartItems.set(action.payload.id, {
-      //     ...state.cartItems,
-      //     amount: 2,
+      const id = action.payload.id;
+      const amount = state.cartItems.get(id).amount + 1;
+      console.log(amount);
+      const newItem = {
+        ...state.cartItems.get(id),
+        amount,
+      };
+      console.log(newItem);
+
+      //   state.cartItems.set(id, newItem);
+
+      //   state.cartItems.set(id, {
+      //     ...state.cartItems.get(id),
+      //     amount,
       //   });
-
-      //   console.log(state.cartItems.get(action.payload.id));
-      //   console.log(state.cartItems.get(action.payload.id).amount);
-
-      //   const newAmount = state.cartItems.get(action.payload.id).amount + 1;
-      //   state.cartItems.set(action.payload.id, newAmount);
-      //   console.log(state.cartItems.get(action.payload.id).amount);
-      //   console.log(state.cartItems);
 
       return { ...state };
 
