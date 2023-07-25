@@ -23,14 +23,31 @@ const defaultState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case INCREASE_AMOUNT:
-      return;
+      console.log({
+        ...state.cartItems.get(action.payload.id),
+        amount: state.cartItems.get(action.payload.id).amount + 1,
+      });
+
+      //   state.cartItems.set(action.payload.id, {
+      //     ...state.cartItems,
+      //     amount: 2,
+      //   });
+
+      //   console.log(state.cartItems.get(action.payload.id));
+      //   console.log(state.cartItems.get(action.payload.id).amount);
+
+      //   const newAmount = state.cartItems.get(action.payload.id).amount + 1;
+      //   state.cartItems.set(action.payload.id, newAmount);
+      //   console.log(state.cartItems.get(action.payload.id).amount);
+      //   console.log(state.cartItems);
+
+      return { ...state };
 
     case DECREASE_AMOUNT:
       return;
 
     case REMOVE_ITEM:
-      const { id } = action.payload;
-      state.cartItems.delete(id);
+      state.cartItems.delete(action.payload.id);
       return { ...state };
 
     case CLEAR_CART:
@@ -53,7 +70,9 @@ const reducer = (state, action) => {
 const AppContext = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, defaultState);
 
-  const increaseAmount = () => {};
+  const increaseAmount = (id) => {
+    dispatch({ type: INCREASE_AMOUNT, payload: { id } });
+  };
   const decreaseAmount = () => {};
   const removeItem = (id) => {
     dispatch({ type: REMOVE_ITEM, payload: { id } });
