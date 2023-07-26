@@ -1,4 +1,6 @@
-export const INCREASE = 'INCREASE';
-export const DECREASE = 'DECREASE';
-export const REMOVE = 'REMOVE';
-export const CLEAR = 'CLEAR';
+export const INCREASE_AMOUNT = 'INCREASE_AMOUNT';
+export const DECREASE_AMOUNT = 'DECREASE_AMOUNT';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const CLEAR_CART = 'CLEAR_CART';
+export const CALCULATE_TOTAL = 'CALCULATE_TOTAL';
+export const FETCH_DATA = 'FETCH_DATA';

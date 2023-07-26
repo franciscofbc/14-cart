@@ -1,8 +1,10 @@
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { useGlobalContext } from './AppContext';
 
-const CartItem = ({ id, img, title, price, amount }) => {
-  const { increaseAmount, removeItem, calculateTotal } = useGlobalContext();
+const CartItem = ({ cartItem }) => {
+  const { id, img, title, price, amount } = cartItem;
+  const { increaseAmount, decreaseAmount, removeItem, calculateTotal } =
+    useGlobalContext();
 
   return (
     <article className="cart-item">
@@ -26,8 +28,8 @@ const CartItem = ({ id, img, title, price, amount }) => {
         <button
           className="amount-btn"
           onClick={() => {
-            increaseAmount(id);
-            // calculateTotal();
+            increaseAmount(cartItem);
+            calculateTotal();
           }}
         >
           <FaChevronUp className="amount-icon" />
@@ -35,7 +37,14 @@ const CartItem = ({ id, img, title, price, amount }) => {
         {/* amount */}
         <span className="amount">{amount}</span>
         {/* decrease amount */}
-        <button className="amount-btn" onClick={() => console.log('decrease')}>
+        <button
+          className="amount-btn"
+          onClick={() => {
+            decreaseAmount(cartItem);
+            amount === 1 && removeItem(id);
+            calculateTotal();
+          }}
+        >
           <FaChevronDown className="amount-icon" />
         </button>
       </div>
