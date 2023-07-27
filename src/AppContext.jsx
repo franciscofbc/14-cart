@@ -1,50 +1,35 @@
 import React, { createContext, useContext, useEffect, useReducer } from 'react';
-import cartItems from './data';
 import {
-  CALCULATE_TOTAL,
   CLEAR_CART,
   DECREASE_AMOUNT,
-  FETCH_DATA,
+  DISPLAY,
   INCREASE_AMOUNT,
+  IS_LOADING,
   REMOVE_ITEM,
 } from './actions';
 import reducer from './reducer';
+import { calculateTotal } from './utils';
+
 const url = 'https://www.course-api.com/react-useReducer-cart-project';
 
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 
-const defaultState = {
-  // cartItems: new Map(),
-  // total: 0,
-  // totalAmount: 0,
-  cartItems: new Map(cartItems.map((cartItem) => [cartItem.id, cartItem])),
-  total: cartItems.reduce(
-    (accumulator, currentValue) =>
-      accumulator + parseFloat(currentValue.price * currentValue.amount),
-    0
-  ),
-  totalAmount: cartItems.reduce(
-    (accumulator, currentValue) => accumulator + currentValue.amount,
-    0
-  ),
+const initialState = {
+  cartItems: new Map(),
+  isLoading: false,
 };
 
 const AppContext = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, defaultState);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { total, totalAmount } = calculateTotal(state.cartItems);
 
-  console.log(state.cartItems);
-
-  // useEffect(() => {
-  //   fetchData(url);
-  // }, []);
-
-  const increaseAmount = (cartItem) => {
-    dispatch({ type: INCREASE_AMOUNT, payload: { cartItem } });
+  const increaseAmount = (id) => {
+    dispatch({ type: INCREASE_AMOUNT, payload: { id } });
   };
 
-  const decreaseAmount = (cartItem) => {
-    dispatch({ type: DECREASE_AMOUNT, payload: { cartItem } });
+  const decreaseAmount = (id) => {
+    dispatch({ type: DECREASE_AMOUNT, payload: { id } });
   };
 
   const removeItem = (id) => {
@@ -55,13 +40,20 @@ const AppContext = ({ children }) => {
     dispatch({ type: CLEAR_CART });
   };
 
-  const calculateTotal = () => {
-    dispatch({ type: CALCULATE_TOTAL });
+  const fetchData = async () => {
+    try {
+      dispatch({ type: IS_LOADING });
+      const res = await fetch(url);
+      const data = await res.json();
+      dispatch({ type: DISPLAY, payload: { data } });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const fetchData = (url) => {
-    dispatch({ type: FETCH_DATA, payload: { url } });
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <GlobalContext.Provider
@@ -71,7 +63,8 @@ const AppContext = ({ children }) => {
         decreaseAmount,
         removeItem,
         clearCart,
-        calculateTotal,
+        total,
+        totalAmount,
       }}
     >
       {children}

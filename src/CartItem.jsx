@@ -3,8 +3,7 @@ import { useGlobalContext } from './AppContext';
 
 const CartItem = ({ cartItem }) => {
   const { id, img, title, price, amount } = cartItem;
-  const { increaseAmount, decreaseAmount, removeItem, calculateTotal } =
-    useGlobalContext();
+  const { increaseAmount, decreaseAmount, removeItem } = useGlobalContext();
 
   return (
     <article className="cart-item">
@@ -17,7 +16,6 @@ const CartItem = ({ cartItem }) => {
           className="remove-btn"
           onClick={() => {
             removeItem(id);
-            calculateTotal();
           }}
         >
           remove
@@ -28,8 +26,7 @@ const CartItem = ({ cartItem }) => {
         <button
           className="amount-btn"
           onClick={() => {
-            increaseAmount(cartItem);
-            calculateTotal();
+            increaseAmount(id);
           }}
         >
           <FaChevronUp className="amount-icon" />
@@ -40,9 +37,7 @@ const CartItem = ({ cartItem }) => {
         <button
           className="amount-btn"
           onClick={() => {
-            decreaseAmount(cartItem);
-            amount === 1 && removeItem(id);
-            calculateTotal();
+            decreaseAmount(id);
           }}
         >
           <FaChevronDown className="amount-icon" />
