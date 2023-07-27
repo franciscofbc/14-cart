@@ -67,7 +67,7 @@ const reducer = (state, action) => {
           );
 
           console.log(state);
-          return { ...state };
+          return state;
         } catch (error) {
           console.log(error);
         }

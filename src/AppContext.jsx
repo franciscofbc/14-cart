@@ -33,6 +33,8 @@ const defaultState = {
 const AppContext = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, defaultState);
 
+  console.log(state.cartItems);
+
   // useEffect(() => {
   //   fetchData(url);
   // }, []);
